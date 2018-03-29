@@ -23,8 +23,9 @@ numeros = ['0','1','2','3','4','5','6','7','8','9']
 
 ponto='.'
 
-#declaração da classe atomo
+aspa ='\"'
 
+#declaração da classe atomo
 class Atomo:
     lexema = ''
     linha = 0
@@ -32,36 +33,4 @@ class Atomo:
     erro = False
     fim_de_arquivo= False
     
-# class Numero(Atomo):
-#     pass
-
-# class Palavra_Reservada(Atomo):
-#     pass
-
-# class OP_RELACIONAL(Atomo):
-#     pass
-
-# class OP_LOGICO(Atomo):
-#     pass
-
-# class IDENTIFICADOR(Atomo):
-#     pass
-
-# class NUMERO_INTEIRO(Atomo):
-#     pass
-
-# class NUMERO_REAL(Atomo):
-#     pass
-
-# class FRASE(Atomo):
-#     pass
-
-# class COMENTARIO(Atomo):
-#     pass
-
-# class INICIAL(Atomo):
-#     pass
-
-
-
 
