@@ -47,6 +47,7 @@ def leitor(arquivo):
             byte = arquivo.read(1)
             ver_linha(byte)
             atomo.linha = linha
+
         else:
             #inicio da máquina de estados
             #****condição de identificador****
@@ -69,10 +70,6 @@ def leitor(arquivo):
                     atomo.tipo = 'P_RESERVADA'
                     atomo.lexema = atomo.lexema.upper()
                     return atomo
-
-                elif((ver_delimit(byte) or byte == '') is True):
-                    atomo.tipo = 'IDENTIFICADOR'
-                    return atomo
             
                 else:
                     atomo.tipo = 'IDENTIFICADOR'
@@ -84,18 +81,19 @@ def leitor(arquivo):
                 while(not ver_delimit(byte)):
                     if(byte == ''):
                         break
-
+                    
                     byte = arquivo.read(1)
                     ver_linha(byte)
 
                     if(ver_numero(byte)):
                         atomo.lexema = atomo.lexema + byte
-                    
-                    #****condição de exponêncial
+
+                    #****condição de exponêncial****
                     elif(byte.lower() == 'e'):
                         atomo.lexema = atomo.lexema + byte
                         byte = arquivo.read(1)
-                        #pontência positiva ou negativa da exponêncial
+
+                        #potência positiva ou negativa da exponêncial
                         if((byte == '+' or byte =='-')is True):
                             atomo.lexema = atomo.lexema + byte
                             while(not ver_delimit(byte)):
@@ -107,11 +105,6 @@ def leitor(arquivo):
 
                                 if(ver_numero(byte)):
                                     atomo.lexema = atomo.lexema + byte
-                            
-                                elif((ver_char(byte) or byte =='.')is True):
-                                    atomo.lexema = atomo.lexema + byte
-                                    atomo.erro = True
-                                    return atomo
                             
                                 else:
                                     break
@@ -130,6 +123,10 @@ def leitor(arquivo):
                             return atomo
                         #fim da condição exponencial (numero inteiro)
 
+                    elif(ver_char(byte)):
+                        atomo.erro = True
+                        return atomo
+                        
                     #****condição numero real****
                     elif(byte == ponto):
                         atomo.lexema = atomo.lexema + byte
@@ -159,20 +156,10 @@ def leitor(arquivo):
 
                                         if(ver_numero(byte)):
                                             atomo.lexema = atomo.lexema + byte
-                            
-                                        elif((ver_char(byte) or byte =='.')is True):
-                                            atomo.lexema = atomo.lexema + byte
-                                            atomo.erro = True
-                                            return atomo
-                            
+
                                         else:
                                             break
 
-                                    if((ver_delimit(byte) or byte == '') is True):
-                                        atomo.tipo = 'OP_EXPONENCIAL'
-                                        return atomo
-                            
-                              
                                     atomo.tipo = 'OP_EXPONENCIAL'
                                     return atomo
 
@@ -180,37 +167,17 @@ def leitor(arquivo):
                                     atomo.lexema = atomo.lexema + byte
                                     atomo.erro = True
                                     return atomo
+
                             #fim da condição enxponencial(para numero real)
-
-                            elif((ver_char(byte) or byte == ponto)is True):
-                                atomo.lexema = atomo.lexema + byte
-                                atomo.erro = True
-                                return atomo
-
                             else:
                                 break
 
-                        if((ver_delimit(byte) or byte == '') is True):
-                            atomo.tipo = 'NUMERO_REAL'
-                            return atomo
+                        atomo.tipo = 'NUMERO_REAL'
+                        return atomo
 
-                        
-                
                     else:
-                        break
-                
-                if((ver_delimit(byte) or byte == '') is True):
-                    atomo.tipo = 'NUMERO_INTEIRO'
-                    return atomo
-
-                elif(ver_char(byte)):
-                    atomo.lexema = atomo.lexema + byte
-                    atomo.erro = True
-                    return atomo
-
-                else:
-                    atomo.tipo = 'NUMERO_INTEIRO'
-                    return atomo
+                        atomo.tipo = 'NUMERO_INTEIRO'
+                        return atomo
 
             #****condição operadores lógicos****
             if(byte in OP_LOGICO):
@@ -271,7 +238,6 @@ def leitor(arquivo):
                                     return atomo
                                 
                                 else:
-                                    print('entrou no else do comentário')
                                     break
                                     
                         atomo.lexema = 'comentário'
@@ -307,7 +273,6 @@ def leitor(arquivo):
                     byte = arquivo.read(1)
                     ver_linha(byte)
                     
-
                     if(byte == '\"'):
                         atomo.tipo = 'FRASE'
                         byte = arquivo.read(1)
